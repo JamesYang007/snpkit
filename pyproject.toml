@@ -1,0 +1,82 @@
+[project]
+name = "snpkit"
+dynamic = ["version"]
+authors = [
+    { name="James Yang", email="jamesyang916@gmail.com" },
+]
+maintainers = [
+    { name="James Yang", email="jamesyang916@gmail.com" },
+]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3 :: Only",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Software Development",
+    "Topic :: Scientific/Engineering",
+    "Typing :: Typed",
+    "Operating System :: OS Independent",
+]
+description = "A Python package for SNP-related tools."
+license = {file = "LICENSE"}
+keywords = ["snps", "GWAS"]
+readme = "README.md"
+requires-python = ">=3.9,<3.11"
+dependencies = [
+    "numpy",
+    "pandas",
+]
+
+[project.urls]
+Homepage = "https://github.com/JamesYang007/snpkit"
+Documentation = "https://jamesyang007.github.io/snpkit"
+Repository = "https://github.com/JamesYang007/snpkit"
+
+[tool.poetry]
+name = "snpkit"
+version = "0.0.0"
+description = "A Python package for SNP-related tools."
+authors = [
+    "James Yang <jamesyang916@gmail.com>",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.11"
+numpy = "^1.24.2"
+pandas = "^1.5.3"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.2.1"
+
+[tool.poetry.group.doc.dependencies]
+sphinx = "^7.2.6"
+pydata-sphinx-theme = "^0.14.1"
+numpydoc = "^1.6.0"
+nbsphinx = "^0.9.3"
+
+[tool.poetry.group.dev.dependencies]
+pybind11 = "^2.11.1"
+pre-commit = "^3.1.1"
+ipython = "^8.11.0"
+nbformat = "^5.7.3"
+jupyter = "^1.0.0"
+jupytext = "^1.14.5"
+tqdm = "^4.65.0"
+twine = "^4.0.2"
+
+[tool.jupytext]
+notebook_metadata_filter = "-all"
+cell_metadata_filter = "-all"
+
+[build-system]
+requires = [
+    "setuptools", 
+    "pybind11",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
