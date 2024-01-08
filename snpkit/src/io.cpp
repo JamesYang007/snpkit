@@ -20,6 +20,7 @@ void msp_reader(py::module_& m)
             py::arg("n_rows_hint"),
             py::arg("n_threads")
         )
+        .def_readonly("filename", &io_t::_filename)
         .def_readonly("ancestry_map", &io_t::_ancestry_map)
         .def_readonly("haplotype_IDs", &io_t::_haplotype_IDs)
         .def_property_readonly("sample_IDs", [](const io_t& s) { 
@@ -63,7 +64,6 @@ void msp_reader(py::module_& m)
         })
         ;
 }
-
 
 void register_io(py::module_& m)
 {

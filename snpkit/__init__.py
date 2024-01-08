@@ -1,3 +1,3 @@
-from .snpkit_core import *
-from .snpkit import *
+from . import snpkit_core
 from . import io
+from .snpkit import *
