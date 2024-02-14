@@ -23,12 +23,7 @@ void msp_reader(py::module_& m)
         .def_readonly("filename", &io_t::_filename)
         .def_readonly("ancestry_map", &io_t::_ancestry_map)
         .def_readonly("haplotype_IDs", &io_t::_haplotype_IDs)
-        .def_property_readonly("sample_IDs", [](const io_t& s) { 
-            return Eigen::Map<const sk::util::rowvec_type<int32_t>>(
-                s._sample_IDs.data(),
-                s._sample_IDs.size()
-            );
-        })
+        .def_readonly("sample_IDs", &io_t::_sample_IDs)
         .def_property_readonly("chm", [](const io_t& s) {
             return Eigen::Map<const sk::util::rowvec_type<int32_t>>(
                 s._chm.data(),

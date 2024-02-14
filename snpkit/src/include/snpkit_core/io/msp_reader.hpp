@@ -22,7 +22,7 @@ public:
     const string_t _filename;
     std::unordered_map<string_t, int8_t> _ancestry_map;
     std::vector<string_t> _haplotype_IDs;
-    std::vector<int32_t> _sample_IDs;
+    std::vector<string_t> _sample_IDs;
     std::vector<int32_t> _chm;
     std::vector<int32_t> _pos;
     std::vector<double> _gpos;
@@ -253,7 +253,7 @@ public:
         #pragma omp parallel for schedule(static) num_threads(n_threads)
         for (int i = 0; i < _sample_IDs.size(); ++i) {
             const auto& hap_id = _haplotype_IDs[2 * i];
-            fast_atoi<int32_t>(hap_id.data(), '.', _sample_IDs[i]);
+            _sample_IDs[i] = hap_id.substr(0, hap_id.size()-2); // remove ".0" or ".1"
         }
 
         if (max_rows == 2) return;
