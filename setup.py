@@ -25,7 +25,7 @@ ParallelCompile("NPY_NUM_BUILD_JOBS").install()
 
 __version__ = open("VERSION", "r").read()
 
-ENVPATH = os.getenv("CONDA_PREFIX")
+# ENVPATH = os.getenv("CONDA_PREFIX")
 
 extra_compile_args = sysconfig.get_config_var('CFLAGS').split()
 extra_compile_args += ["-Wall", "-Wextra", "-DNDEBUG", "-O3"]
@@ -58,7 +58,7 @@ ext_modules = [
             "snpkit/src",
             "snpkit/src/include",
             "snpkit/src/third_party/eigen3",
-            os.path.join(ENVPATH, 'include'),
+            # os.path.join(ENVPATH, 'include'),
         ],
         extra_compile_args=extra_compile_args,
         extra_link_args=extra_link_args,
