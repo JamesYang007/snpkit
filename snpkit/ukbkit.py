@@ -48,11 +48,12 @@ def check_msp_coherence(
 ):
     reader = sk.io.MSPReader(msps[0])
     reader.read_header()
-    iids = reader.sample_IDs
+    iids = [int(iid) for iid in reader.sample_IDs]
     for msp in msps:
         reader = sk.io.MSPReader(msp)
         reader.read_header()
-        assert np.allclose(iids, reader.sample_IDs)
+        curr_iids = [int(iid) for iid in reader.sample_IDs]
+        assert np.allclose(iids, curr_iids)
 
 
 def check_call_msp_coherence(
@@ -63,8 +64,8 @@ def check_call_msp_coherence(
     psam_df = pd.read_csv(psam, sep='\t')
     reader = sk.io.MSPReader(msp)
     reader.read_header()
-    psam_iids = psam_df["IID"].to_numpy()
-    msp_iids = reader.sample_IDs
+    psam_iids = np.array([int(iid) for iid in psam_df["IID"].to_numpy()])
+    msp_iids = np.array([int(iid) for iid in reader.sample_IDs])
 
     if indices is None:
         if len(psam_iids) != len(msp_iids):
@@ -126,7 +127,7 @@ def read_calldata(
     pgen_reader.close()
 
     logger.logger.info(f"Converting to sample-major.")
-    calldata = to_sample_major(calldata, n_threads=n_threads)
+    calldata = sk.to_sample_major(calldata, n_threads=n_threads)
 
     return calldata, sample_indices, snp_indices
 
@@ -171,7 +172,7 @@ def read_lai(
     lai = reader.lai[lai_indices]
 
     logger.logger.info(f"Converting to sample-major.")
-    lai = to_sample_major(lai, n_threads=n_threads)
+    lai = sk.to_sample_major(lai, n_threads=n_threads)
 
     return lai, sample_indices, reader
 
@@ -212,9 +213,10 @@ def cache_snpdat(
     )
 
     # the non-negative IIDs (not excluded by UKB) should match up exactly.
+    my_iids_subset = np.array([int(iid) for iid in reader.sample_IDs])
     psam_iids_subset = psam_df.iloc[sample_indices, :]["IID"]
     assert np.allclose(
-        reader.sample_IDs[reader.sample_IDs >= 0], 
+        my_iids_subset[my_iids_subset >= 0], 
         psam_iids_subset[psam_iids_subset >= 0],
     )
 
@@ -281,7 +283,7 @@ def cache_unphased_snpdat(
         n_threads=n_threads,
     )
 
-    calldata = calldata_sum(calldata, n_threads=n_threads)
+    calldata = sk.calldata_sum(calldata, n_threads=n_threads)
 
     # convert to snpdat
     logger.logger.info("Saving as snpdat.")
