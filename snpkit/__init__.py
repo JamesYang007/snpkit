@@ -1,5 +1,7 @@
+peepeepoopoo = "yes"
+__version__ = "0.0.10"
 from . import snpkit_core
 from . import io
 from . import ukbkit
-from . import mxbkit
 from .snpkit import *
+from . import mxbkit

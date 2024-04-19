@@ -51,20 +51,34 @@ calldata_sum(
 }
 
 template <class T, class V>
-util::rowvec_type<V>
+// util::rowvec_type<V>
+auto
 column_mean(
     const Eigen::Ref<const util::colarr_type<T>>& m,
     size_t n_threads
 )
 {
     util::rowvec_type<V> out(m.cols());
+    util::rowvec_type<size_t> missing(m.cols());
 
     #pragma omp parallel for schedule(static) num_threads(n_threads)
     for (size_t j = 0; j < m.cols(); ++j) {
-        out[j] = m.col(j).template cast<V>().mean();
+        // out[j] = m.col(j).template cast<V>().mean();
+        int sum = 0;
+        int n_miss = 0;
+        for (size_t k = 0; k < m.rows(); ++k) {
+            if (m(k,j) >= 0) {
+                sum += m(k,j);
+            } else {
+                // n_miss += 1;
+                ++n_miss;
+            }
+        }
+        out[j] = static_cast<V>(sum) / (m.rows() - n_miss);
+        missing[j] = n_miss;
     }
 
-    return out;
+    return std::make_tuple(out, missing);
 }
 
 template <class ValueType, class IntType>

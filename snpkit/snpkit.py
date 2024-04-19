@@ -56,5 +56,5 @@ def maf_subset(
     *,
     n_threads: int =1,
 ):
-    mafs = 0.5 * core.column_mean(calldata, n_threads)
+    mafs = 0.5 * core.column_mean(calldata, n_threads)[0]
     return np.arange(mafs.shape[-1])[mafs >= maf_tol]

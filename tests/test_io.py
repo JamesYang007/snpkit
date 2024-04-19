@@ -51,7 +51,7 @@ def test_msp_reader():
     assert np.all(handle.haplotype_IDs == hap_ids)
 
     # check sample IIDs
-    assert np.all(handle.sample_IDs == sample_ids)
+    assert np.all([int(iid) for iid in handle.sample_IDs] == sample_ids)
 
     assert np.allclose(handle.chm, chm)
     assert np.allclose(handle.pos[:, 0], spos)
