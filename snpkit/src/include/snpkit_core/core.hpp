@@ -67,7 +67,7 @@ column_mean(
         for (size_t k = 0; k < m.rows(); ++k) {
             if (m(k,j) > 0) {
                 sum += m(k,j);
-            } else {
+            } else if (m(k,j) < 0) {
                 ++n_miss;
             }
         }

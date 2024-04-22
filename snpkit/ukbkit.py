@@ -288,11 +288,11 @@ def cache_unphased_snpdat(
     # convert to snpdat
     logger.logger.info("Saving as snpdat.")
     handler = ad.io.snp_unphased(dest)
-    bytes_written = handler.write(
+    bytes_written, benchmark = handler.write(
         calldata=calldata,
         n_threads=n_threads,
     )
-
+    logger.logger.info(f"Benchmark: {benchmark}")
     logger.logger.info(f"Bytes written: {bytes_written}")
 
 
