@@ -1,8 +1,8 @@
-import snpkit.snpkit_core as core
+from . import snpkit_core as core
+import ctypes
 import logging
 import numpy as np
 import sys
-import ctypes
 
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)

@@ -1,14 +1,14 @@
+from . import io
+from . import snpkit
+from . import snpkit_core as core
+from tqdm import tqdm
+from typing import Union
 import adelie as ad
 import adelie.logger as logger
 import pandas as pd
+import pgenlib as pg
 import numpy as np
-import pickle
-import snpkit as sk
-import snpkit.snpkit_core as core
-import snpkit.io
 import warnings
-from tqdm import tqdm
-from typing import Union
 
 
 def permute_by(
@@ -46,11 +46,11 @@ def check_call_coherence(
 def check_msp_coherence(
     msps: list,
 ):
-    reader = sk.io.MSPReader(msps[0])
+    reader = io.MSPReader(msps[0])
     reader.read_header()
     iids = [int(iid) for iid in reader.sample_IDs]
     for msp in msps:
-        reader = sk.io.MSPReader(msp)
+        reader = io.MSPReader(msp)
         reader.read_header()
         curr_iids = [int(iid) for iid in reader.sample_IDs]
         assert np.allclose(iids, curr_iids)
@@ -62,7 +62,7 @@ def check_call_msp_coherence(
     indices: np.ndarray =None,
 ):
     psam_df = pd.read_csv(psam, sep='\t')
-    reader = sk.io.MSPReader(msp)
+    reader = io.MSPReader(msp)
     reader.read_header()
     psam_iids = np.array([int(iid) for iid in psam_df["IID"].to_numpy()])
     msp_iids = np.array([int(iid) for iid in reader.sample_IDs])
@@ -92,10 +92,6 @@ def read_calldata(
             sample_indices = np.sort(sample_indices)
         if not snp_indices is None:
             snp_indices = np.sort(snp_indices)
-
-    # pgenlib is a really poorly written library that doesn't work on Mac M1.
-    # We do not perform a global import since this module cannot be loaded on Mac M1 then.
-    import pgenlib as pg
 
     # instantiate PGEN reader
     pgen_reader = pg.PgenReader(
@@ -127,7 +123,7 @@ def read_calldata(
     pgen_reader.close()
 
     logger.logger.info(f"Converting to sample-major.")
-    calldata = sk.to_sample_major(calldata, n_threads=n_threads)
+    calldata = snpkit.to_sample_major(calldata, n_threads=n_threads)
 
     return calldata, sample_indices, snp_indices
 
@@ -144,7 +140,7 @@ def read_lai(
         if not sample_indices is None:
             sample_indices = np.sort(sample_indices)
 
-    reader = sk.io.MSPReader(msp)
+    reader = io.MSPReader(msp)
 
     if sample_indices is None:
         reader.read_header()
@@ -172,7 +168,7 @@ def read_lai(
     lai = reader.lai[lai_indices]
 
     logger.logger.info(f"Converting to sample-major.")
-    lai = sk.to_sample_major(lai, n_threads=n_threads)
+    lai = snpkit.to_sample_major(lai, n_threads=n_threads)
 
     return lai, sample_indices, reader
 
@@ -251,25 +247,13 @@ def cache_snpdat(
 
 def cache_unphased_snpdat(
     pgen: str,
-    pvar: str,
-    psam: str,
     dest: str,
     *,
     sample_indices: np.ndarray=None,
     snp_indices: np.ndarray=None,
-    sort_indices: bool =True,
     n_threads: int =1,
 ):
     logger.logger.info(f"Reading PGEN metadata files.")
-    pvar_df = pd.read_csv(
-        pvar, 
-        sep='\t', 
-        comment='#',
-        header=None, 
-        names=['CHROM', 'POS', 'ID', 'REF', 'ALT'],
-        dtype={'CHROM': str},
-    )
-    psam_df = pd.read_csv(psam, sep='\t')
 
     (
         calldata,
@@ -283,7 +267,7 @@ def cache_unphased_snpdat(
         n_threads=n_threads,
     )
 
-    calldata = sk.calldata_sum(calldata, n_threads=n_threads)
+    calldata = snpkit.calldata_sum(calldata, n_threads=n_threads)
 
     # convert to snpdat
     logger.logger.info("Saving as snpdat.")
@@ -332,8 +316,7 @@ def valid_iids(
         phe_iids = master_df["IID"]
 
         # get MSP IIDs with non-missing phenotype
-        reader = sk.io.msp_reader.MSPReader(msp)
-        header = reader.read_header()
+        reader = io.msp_reader.MSPReader(msp)
         msp_iids = pd.Series(reader.sample_IDs)
         common_iids = msp_iids[msp_iids.isin(phe_iids)]
         logger.logger.info(f"Number of discarded MSP IIDs: {msp_iids.shape[0] - common_iids.shape[0]}")

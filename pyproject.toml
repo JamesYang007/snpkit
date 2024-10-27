@@ -27,6 +27,7 @@ keywords = ["snps", "GWAS"]
 readme = "README.md"
 requires-python = ">=3.9,<3.11"
 dependencies = [
+    "adelie",
     "numpy",
     "pandas",
 ]
@@ -48,25 +49,20 @@ authors = [
 python = ">=3.9,<3.11"
 numpy = "^1.24.2"
 pandas = "^1.5.3"
+tqdm = "^4.65.0"
+adelie = "^1.1.49"
+pgenlib = "^0.91.0"
+pybind11 = "^2.13.6"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.2.1"
 
-[tool.poetry.group.doc.dependencies]
-sphinx = "^7.2.6"
-pydata-sphinx-theme = "^0.14.1"
-numpydoc = "^1.6.0"
-nbsphinx = "^0.9.3"
-
 [tool.poetry.group.dev.dependencies]
 pybind11 = "^2.11.1"
-pre-commit = "^3.1.1"
 ipython = "^8.11.0"
 nbformat = "^5.7.3"
 jupyter = "^1.0.0"
 jupytext = "^1.14.5"
-tqdm = "^4.65.0"
-twine = "^4.0.2"
 
 [tool.jupytext]
 notebook_metadata_filter = "-all"

@@ -1,4 +1,4 @@
-import snpkit.snpkit_core as core
+from . import snpkit_core as core
 import numpy as np
 
 

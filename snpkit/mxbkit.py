@@ -1,10 +1,10 @@
 from . import io
 from tqdm import tqdm
-import snpkit as sk
 import adelie as ad
 import adelie.logger as logger
 import numpy as np
 import pandas as pd
+import snpkit as sk
 
 
 def _msp_get_fid(
