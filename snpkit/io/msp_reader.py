@@ -1,4 +1,4 @@
-from . import snpkit_core as core
+from .. import snpkit_core as core
 import ctypes
 import logging
 import numpy as np
