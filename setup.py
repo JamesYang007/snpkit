@@ -137,7 +137,7 @@ elif system_name == "Linux":
         "-march=native",
     ]
     libraries += [
-        "gomp",
+        "omp",
     ]
 
 else:
