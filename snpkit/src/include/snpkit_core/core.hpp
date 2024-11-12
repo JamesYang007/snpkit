@@ -18,7 +18,7 @@ to_sample_major(
     util::colarr_type<T> out(n_samples, 2 * n_snps);
 
     #pragma omp parallel for schedule(static) num_threads(n_threads)
-    for (size_t j = 0; j < n_snps; ++j) {
+    for (Eigen::Index j = 0; j < n_snps; ++j) {
         const Eigen::Map<const util::rowarr_type<T>> slice(
             m.row(j).data(),
             n_samples,
@@ -43,7 +43,7 @@ calldata_sum(
     util::colarr_type<T> out(n, p);
 
     #pragma omp parallel for schedule(static) num_threads(n_threads)
-    for (size_t j = 0; j < p; ++j) {
+    for (Eigen::Index j = 0; j < p; ++j) {
         out.col(j) = m.col(2*j) + m.col(2*j+1);
     }
 
@@ -88,12 +88,12 @@ util::colmat_type<ValueType> calldata_subset_rows_cols(
 {
     util::colmat_type<ValueType> out(row_indices.size(), 2 * col_indices.size());
     #pragma omp parallel for schedule(static) num_threads(n_threads)
-    for (size_t j = 0; j < col_indices.size(); ++j) {
+    for (Eigen::Index j = 0; j < col_indices.size(); ++j) {
         const auto jj = col_indices[j];
         for (size_t k = 0; k < 2; ++k) {
             const auto m_j = calldata.col(2 * jj + k);
             auto out_j = out.col(2 * j + k);
-            for (size_t i = 0; i < row_indices.size(); ++i) {
+            for (Eigen::Index i = 0; i < row_indices.size(); ++i) {
                 out_j[i] = m_j[row_indices[i]];
             }
         }

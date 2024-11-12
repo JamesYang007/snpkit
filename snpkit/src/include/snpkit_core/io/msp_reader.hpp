@@ -251,7 +251,7 @@ public:
         }
         _sample_IDs.resize(_haplotype_IDs.size() / 2);
         #pragma omp parallel for schedule(static) num_threads(n_threads)
-        for (int i = 0; i < _sample_IDs.size(); ++i) {
+        for (Eigen::Index i = 0; i < static_cast<Eigen::Index>(_sample_IDs.size()); ++i) {
             const auto& hap_id = _haplotype_IDs[2 * i];
             _sample_IDs[i] = hap_id.substr(0, hap_id.size()-2); // remove ".0" or ".1"
         }
@@ -315,7 +315,7 @@ public:
 
             // batch process LAI in parallel
             #pragma omp parallel for schedule(static) num_threads(n_threads)
-            for (int t = 0; t < n_lines; ++t) {
+            for (Eigen::Index t = 0; t < static_cast<Eigen::Index>(n_lines); ++t) {
                 size_t idx = 0;
                 for (int i = 0; i < 6; ++i) {
                     const auto size = token_size(buffers[t].data() + idx, delimiter);
@@ -337,7 +337,7 @@ public:
                 size_t subset_idx = 0;
                 while ((idx < n_reads[t]) && (all_haps || subset_idx < hap_ids_indices.size())) {
                     size_t size;
-                    if (all_haps || count == hap_ids_indices[subset_idx]) {
+                    if (all_haps || count == static_cast<size_t>(hap_ids_indices[subset_idx])) {
                         size = fast_atoi(
                             buffers[t].data() + idx,
                             delimiter,
