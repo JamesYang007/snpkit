@@ -233,7 +233,7 @@ public:
             size_t subset_idx = 0;
             while ((idx < n_read) && (all_haps || subset_idx < hap_ids_indices.size())) {
                 const auto size = token_size(buffer.data() + idx, delimiter);
-                if (all_haps || count == hap_ids_indices[subset_idx]) {
+                if (all_haps || count == static_cast<size_t>(hap_ids_indices[subset_idx])) {
                     _haplotype_IDs.emplace_back(
                         buffer.data() + idx,
                         size

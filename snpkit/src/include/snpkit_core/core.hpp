@@ -61,10 +61,10 @@ column_mean(
     util::rowvec_type<size_t> missing(m.cols());
 
     #pragma omp parallel for schedule(static) num_threads(n_threads)
-    for (size_t j = 0; j < m.cols(); ++j) {
+    for (Eigen::Index j = 0; j < m.cols(); ++j) {
         int sum = 0;
         int n_miss = 0;
-        for (size_t k = 0; k < m.rows(); ++k) {
+        for (Eigen::Index k = 0; k < m.rows(); ++k) {
             if (m(k,j) > 0) {
                 sum += m(k,j);
             } else if (m(k,j) < 0) {
