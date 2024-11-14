@@ -102,13 +102,12 @@ protected:
     template <class T>
     static auto fast_atoi(
         const char* ptr,
-        char delimiter,
         T& out
     )
     {
         const char* const old_ptr = ptr;
         out = 0;
-        while (*ptr != delimiter) {
+        while ((*ptr >= '0') && (*ptr <= '9')) {
             out = out * 10 + (*ptr++ - '0');
         }
         return ptr - old_ptr;
@@ -186,7 +185,7 @@ public:
 
                 // read ancestry value
                 int8_t value;
-                idx += fast_atoi(buffer.data() + idx, delimiter, value) + 1;
+                idx += fast_atoi(buffer.data() + idx, value) + 1;
 
                 // register key-value pair
                 _ancestry_map[std::move(key)] = value;
@@ -340,7 +339,6 @@ public:
                     if (all_haps || count == static_cast<size_t>(hap_ids_indices[subset_idx])) {
                         size = fast_atoi(
                             buffers[t].data() + idx,
-                            delimiter,
                             _lai[lai_idx + n_haps * t + subset_idx]
                         );
                         ++subset_idx;

@@ -136,8 +136,8 @@ elif system_name == "Linux":
         "-fopenmp", 
         "-march=native",
     ]
-    extra_link_args += [
-        "-fopenmp",
+    libraries += [
+        "gomp",
     ]
 
 else:
