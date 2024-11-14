@@ -175,7 +175,6 @@ public:
             if (buffer[n_read-1] != '\n') {
                 throw std::runtime_error("First line does not end with '\n'.");
             }
-            buffer[n_read-1] = delimiter; // change the newline to delimiter
 
             while (idx < n_read) {
                 // read ancestry key
@@ -189,6 +188,9 @@ public:
 
                 // register key-value pair
                 _ancestry_map[std::move(key)] = value;
+
+                // skip over whitespaces
+                for (; idx < n_read && std::isspace(buffer[idx]); ++idx);
             }
         }
 
