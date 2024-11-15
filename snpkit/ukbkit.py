@@ -191,7 +191,7 @@ def cache_snpdat(
         sep='\t', 
         comment='#',
         header=None, 
-        names=['CHROM', 'POS', 'ID', 'REF', 'ALT', "IDK"],
+        names=['CHROM', 'POS', 'ID', 'REF', 'ALT'],
         dtype={'CHROM': str},
     )
     psam_df = pd.read_csv(psam, sep='\t')
