@@ -48,11 +48,11 @@ def check_msp_coherence(
 ):
     reader = io.MSPReader(msps[0])
     reader.read_header()
-    iids = [int(iid.split("_")) for iid in reader.sample_IDs]
+    iids = [int(iid.split("_")[0]) for iid in reader.sample_IDs]
     for msp in msps:
         reader = io.MSPReader(msp)
         reader.read_header()
-        curr_iids = [int(iid.split("_")) for iid in reader.sample_IDs]
+        curr_iids = [int(iid.split("_")[0]) for iid in reader.sample_IDs]
         assert np.allclose(iids, curr_iids)
 
 
@@ -65,7 +65,7 @@ def check_call_msp_coherence(
     reader = io.MSPReader(msp)
     reader.read_header()
     psam_iids = np.array([int(iid) for iid in psam_df["IID"].to_numpy()])
-    msp_iids = np.array([int(iid.split("_")) for iid in reader.sample_IDs])
+    msp_iids = np.array([int(iid.split("_")[0]) for iid in reader.sample_IDs])
 
     if indices is None:
         if len(psam_iids) != len(msp_iids):
